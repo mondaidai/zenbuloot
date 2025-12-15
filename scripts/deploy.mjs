@@ -97,7 +97,7 @@ async function setupInitialItems(omamoriContract, ownerSigner) {
         {
             name: "Success",
             defaultUses: 5,
-            imageURI: "/images/red_omamori.png",
+            imageURI: "images/red_omamori.png",
             retired: false,
             availableInShop: true,
             expiresAt: 0,
@@ -109,11 +109,11 @@ async function setupInitialItems(omamoriContract, ownerSigner) {
             maxInvestment: ethers.parseEther("600.0"),
             strategyId: 1
         },
-        // ... all other items
+
         {
             name: "Wealth",
             defaultUses: 0,
-            imageURI: "/images/violet_omamori.png",
+            imageURI: "images/violet_omamori.png",
             retired: false,
             availableInShop: true,
             expiresAt: 0,
