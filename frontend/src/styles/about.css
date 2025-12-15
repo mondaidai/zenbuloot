@@ -1,0 +1,92 @@
+/* Full-page background */
+body {
+  background: #e2e0e0;
+}
+
+/* Outer wrapper */
+.about-container {
+  width: 100%;
+  background: #e2e0e0;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+/* Inner card */
+.about-inner {
+  width: 85%;
+  max-width: 1200px;
+  background: #ffffff;
+  padding: 40px 60px 80px 60px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border-radius: 8px;
+}
+
+/* Title with gradient */
+.about-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+/* Subheadings */
+.about-inner h2 {
+  font-size: 1.6rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #52796f;
+}
+
+/* Text paragraphs */
+.about-inner p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #2f3e46;
+  margin-bottom: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .about-inner {
+    width: 90%;
+    padding: 30px 40px 70px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-inner {
+    width: 95%;
+    padding: 20px 20px 50px 20px;
+  }
+
+  .about-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-inner h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-container {
+    padding: 20px 10px;
+  }
+
+  .about-inner {
+    width: 100%;
+    padding: 15px 15px 40px 15px;
+  }
+
+  .about-title {
+    font-size: 1.75rem;
+  }
+}

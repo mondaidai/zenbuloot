@@ -1,0 +1,68 @@
+{
+  "_format": "hh3-artifact-1",
+  "contractName": "IGameEngine",
+  "sourceName": "contracts/interfaces/IGameEngine.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "chancePercent",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint256",
+          "name": "betAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "pickAChance",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "win",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256",
+              "name": "zknReward",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "droppedItemTypeId",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct GameResult",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newHouseEdge",
+          "type": "uint256"
+        }
+      ],
+      "name": "setHouseEdge",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {},
+  "immutableReferences": {},
+  "inputSourceName": "project/contracts/interfaces/IGameEngine.sol",
+  "buildInfoId": "solc-0_8_28-e3f5b2e19080d76ce25cb914cc938e032906e967"
+}

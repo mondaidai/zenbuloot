@@ -1,0 +1,49 @@
+/* Quick actions container */
+.quick-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+/* Action box buttons */
+.quick-box {
+  flex: 1;
+  max-width: 460px;
+  text-align: center;
+  padding: 1.25rem 2.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  border: none;
+}
+
+.quick-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.quick-box--alt {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+}
+
+.quick-box--alt:hover {
+  box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+}
+
+/* Mobile behavior */
+@media (max-width: 600px) {
+  .quick-actions {
+    flex-wrap: wrap;
+  }
+
+  .quick-box {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+}
