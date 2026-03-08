@@ -15,6 +15,7 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
     error NoZKNTokensMinted();
     error InsufficientETH();
     error NotNFTOwner();
+    error AmountTooSmall();
     error InvalidLockIndex();
     error NoClaimableZKN();
     error NoZKNTokensToMint();
@@ -23,18 +24,12 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
     error ETHTransferFailed();
     error InvalidFeeRange(string feeType);
     error ItemNotAvailable();
-    error AmountTooSmall();
-    error NoLocksSpecified();
-    error TooManyLocks();
-    error InvalidRange();
-    error RangeOutOfBounds();
     error GameEngineNotSet();
     error InvalidRewardFromEngine();
     error RefundFailed();
     error QueueFull();
 
     event ZKNUnlocked(address indexed user, uint256 totalClaimed);
-    event ZKNLocked(address indexed user, uint256 tokenId, uint256 lockIndex, uint256 amount, uint256 lockEnd);
     event ZKNSold(address indexed seller, uint256 zknAmount, uint256 ethAmount);
     event ZKNBought(address indexed buyer, uint256 zknAmount, uint256 ethAmount);
     event ETHWithdrawn(address indexed to, uint256 amount);
@@ -71,15 +66,6 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
     FeeSettings public fees = FeeSettings(500, 0, 300, 100, 1500);
     FeeCollectedState public collectedFees; // Tracks collected fees
 
-    struct ZKNLock {
-        uint256 amount;
-        uint256 lockEnd;
-        bool claimed;
-        uint256 tokenId;
-    }
-    mapping(address => ZKNLock[]) public userLocks;
-    mapping(address => uint256) public userTotalZKNLocked;
-
     constructor(Zenikane _token, IOmamoriNFT _omm, IGameEngine _gameEngine, IVault _vault) Ownable(msg.sender) {
         zkn = _token;
         omm = _omm;
@@ -108,16 +94,6 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
         uint256 totalETHBacking = vault.getTotalHarvestableYield() + address(this).balance;
         ZKN_PRICE_IN_ETH = (totalETHBacking * (10 ** zkn.decimals())) / totalSupply;
         emit ZKNPriceUpdated(ZKN_PRICE_IN_ETH, totalETHBacking, totalSupply);
-    }
-
-    function _isLockClaimable(ZKNLock memory lock) internal view returns (bool) {
-        return lock.amount > 0 && !lock.claimed && block.timestamp >= lock.lockEnd;
-    }
-
-    function getAvailableZKN(address user) public view returns (uint256) {
-        uint256 totalBalance = zkn.balanceOf(user);
-        uint256 locked = userTotalZKNLocked[user];
-        return totalBalance > locked ? totalBalance - locked : 0;
     }
 
     function withdrawProfits(address to, uint256 amountZKN) external onlyOwner {
@@ -172,7 +148,7 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
 
         if (netZKNToMint > 0) {
             zkn.mint(msg.sender, netZKNToMint);
-            _lockZKN(msg.sender, tokenId, netZKNToMint, lockDuration);
+            zkn.lockZKN(msg.sender, tokenId, netZKNToMint, lockDuration);
         }
     }
 
@@ -182,76 +158,6 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
         return (baseReward * vault.getRiskAdjustedMultiplier(strategyId)) / 10000;
     }
 
-    function _lockZKN(address user, uint256 tokenId, uint256 amount, uint256 duration) internal returns (uint256) {
-        if (tokenId != 0) {
-            // tokenId of 0 means lock for selling
-            (, ItemType memory it) = omm.getItemInfo(tokenId);
-            if (amount == 0) revert AmountTooSmall();
-            if (duration < it.minLockDuration) revert InvalidFeeRange("Duration too short");
-            if (duration > it.maxLockDuration) revert InvalidFeeRange("Duration too long");
-        }
-        if (zkn.balanceOf(user) < amount) revert InsufficientZKNBalance();
-
-        uint256 lockIndex = userLocks[user].length;
-        userLocks[user].push(ZKNLock({ amount: amount, lockEnd: block.timestamp + duration, claimed: false, tokenId: tokenId }));
-        userTotalZKNLocked[user] += amount;
-        emit ZKNLocked(user, tokenId, lockIndex, amount, block.timestamp + duration);
-        return lockIndex;
-    }
-
-    function _unlockZKNInternal(address user, uint256 lockIndex, bool success) internal {
-        if (lockIndex >= userLocks[user].length) return;
-
-        ZKNLock storage lock = userLocks[user][lockIndex];
-        uint256 originalAmount = lock.amount;
-
-        lock.claimed = true;
-        userTotalZKNLocked[user] -= originalAmount;
-
-        if (!success) lock.amount = 0;
-
-        emit ZKNUnlocked(user, originalAmount);
-    }
-
-    function unlockZKN(uint256[] calldata lockIndexes) external nonReentrant {
-        if (lockIndexes.length == 0) revert NoLocksSpecified();
-        if (lockIndexes.length > 50) revert TooManyLocks();
-
-        uint256 totalToUnlock = 0;
-
-        for (uint256 i = 0; i < lockIndexes.length; i++) {
-            uint256 lockIndex = lockIndexes[i];
-            if (lockIndex >= userLocks[msg.sender].length) revert InvalidLockIndex();
-
-            ZKNLock storage lock = userLocks[msg.sender][lockIndex];
-            if (_isLockClaimable(lock)) {
-                totalToUnlock += lock.amount;
-                lock.claimed = true;
-            }
-        }
-
-        if (totalToUnlock == 0) revert NoClaimableZKN();
-        userTotalZKNLocked[msg.sender] -= totalToUnlock;
-        emit ZKNUnlocked(msg.sender, totalToUnlock);
-    }
-
-    function getLocksRange(address user, uint256 start, uint256 end) public view returns (ZKNLock[] memory) {
-        if (start > end) revert InvalidRange();
-        if (end > userLocks[user].length) revert RangeOutOfBounds();
-
-        uint256 length = end - start;
-        ZKNLock[] memory locks = new ZKNLock[](length);
-
-        for (uint256 i = 0; i < length; i++) {
-            locks[i] = userLocks[user][start + i];
-        }
-
-        return locks;
-    }
-
-    function getLockLength(address user) external view returns (uint256) {
-        return userLocks[user].length;
-    }
 
     function buyAndInvestOmamoriNFT(uint256 typeId, uint256 lockDuration) public payable nonReentrant {
         ItemType memory it = omm.getItemType(typeId);
@@ -282,7 +188,7 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
             vault.invest{ value: excessAmount }(msg.sender, tokenId, lockDuration, excessAmount);
 
             zkn.mint(msg.sender, netZKN);
-            _lockZKN(msg.sender, tokenId, netZKN, lockDuration);
+            zkn.lockZKN(msg.sender, tokenId, netZKN, lockDuration);
 
             investedAmount = excessAmount;
         }
@@ -328,14 +234,14 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
                 soldZKN += entry.amountZKN;
                 totalETHPaidOut += entry.amountETH;
                 // unlock as consumed
-                _unlockZKNInternal(entry.user, entry.lockIndex, true);
+                zkn.singleUnlockZKN(entry.user, entry.lockIndex, true);
 
                 emit ZKNSold(entry.user, entry.amountZKN, entry.amountETH);
             } else {
                 // burn failed => user no longer owns ZKN => skip payout
 
                 // unlock as expired/invalid
-                _unlockZKNInternal(entry.user, entry.lockIndex, false);
+                zkn.singleUnlockZKN(entry.user, entry.lockIndex, false);
 
                 emit SellSkippedUserNoZKN(entry.user, entry.amountZKN);
             }
@@ -372,7 +278,7 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
             emit ZKNSold(msg.sender, amountZKN, userReceivesETH);
         } else {
             // lock ZKN when putting into queue, to allow use spend ZKN in app while waiting
-            uint256 lockId = _lockZKN(msg.sender, 0, amountZKN, QUEUE_EXPIRY_DURATION);
+            uint256 lockId = zkn.lockZKN(msg.sender, 0, amountZKN, QUEUE_EXPIRY_DURATION);
 
             // Queue for later processing
             if (sellQueue.length >= MAX_QUEUE_LENGTH) revert QueueFull();
@@ -404,8 +310,8 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
             uint256 burnAmount = betAmount;
 
             // available = total balance minus locked tracked amount
-            uint256 available = getAvailableZKN(msg.sender);
-            uint256 locked = userTotalZKNLocked[msg.sender];
+            uint256 available = zkn.getAvailableZKN(msg.sender);
+            uint256 locked = zkn.userTotalZKNLocked(msg.sender);
 
             if (available >= burnAmount) {
                 // Burn fully from available balance
@@ -421,9 +327,9 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
                 // Ensure we have enough locked to cover leftover
                 if (locked < leftover) revert InsufficientZKNBalance();
 
-                // Reduce locked accounting and burn the locked portion
-                userTotalZKNLocked[msg.sender] = locked - leftover;
+                // Burn the locked portion
                 zkn.burn(msg.sender, leftover);
+                zkn.singleUnlockZKN(msg.sender, 0, false);
             }
         }
 
@@ -473,6 +379,6 @@ contract ZenbuLoot is Ownable, IZenbuLoot, ReentrancyGuard {
         zkn.mint(msg.sender, netZKNToMint);
 
         // Lock the rewarded ZKN using the SAME tokenId
-        _lockZKN(msg.sender, tokenId, netZKNToMint, newDuration);
+        zkn.lockZKN(msg.sender, tokenId, netZKNToMint, newDuration);
     }
 }
