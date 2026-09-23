@@ -1,165 +1,99 @@
-# **ZenbuLoot**
+# ZenbuLoot
 
-ZenbuLoot is a blockchain-based investment and gaming platform built on smart contracts.
-Users purchase **NFTs representing investment strategies**, lock funds, and receive **instant credit** in the in-app currency **Zenikane (ZKN)**.
-While the investment is locked, users can spend ZKN to play a **Pick-a-Chance** luck-based game.
-Profits earned through gameplay are fully withdrawable as long as the user's balance remains above the original locked amount.
+ZenbuLoot is a blockchain application built around investment strategy NFTs,
+the Zenikane (ZKN) in-app currency, and the Pick-a-Chance game.
 
----
+## Features
 
-## ⭐ **Key Features**
+- Investment strategy NFTs backed by yield strategies such as Aave.
+- ZKN credit issued when an investment is locked.
+- Vault-based locking and withdrawals.
+- An on-chain Pick-a-Chance game using ZKN.
+- Separate contracts for the vault, game engine, loot, and NFTs.
 
-* **Investment Strategy NFTs**
-  Buy NFTs that represent different yield strategies (e.g., Aave-based strategies).
+## Project layout
 
-* **Instant Profit Credit (ZKN)**
-  When investing, users immediately receive ZKN equal to the lock APY reward.
-
-* **Lock-Based Withdrawals**
-  After the lock period ends, investors can withdraw their real profit.
-
-* **On-Chain Casino Game**
-  Use ZKN to play an inApp Pick-a-Chance style game; winnings can be withdrawn.
-
-* **Upgradeable, Modular Architecture**
-  Separate Vault, GameEngine, Loot, and NFT contracts for clean separation of logic.
-
----
-
-# 📁 **Project Structure**
-
-```
-ZenbuLoot/
-│
-├── contracts/                # Solidity smart contracts
-├── scripts/                  # Deployment & utility scripts
-├── artifacts/                # Auto-generated compiler output
-├── frontend/                 # Web frontend (React / Vite / Next.js)
-└── hardhat.config.ts         # Hardhat configuration
+```text
+contracts/       Solidity contracts
+scripts/         Deployment and utility scripts
+frontend/        React/Vite application
+docs/            Production frontend output for GitHub Pages
+artifacts/       Hardhat compiler output
 ```
 
----
+## Setup
 
-# 🚀 **Getting Started**
-
-Follow these steps to set up and run the entire ZenbuLoot dApp (backend + frontend).
-
----
-
-## 1️⃣ **Clone the Repository**
-
-```bash
-git clone <repo>
-cd <repo>
-```
-
----
-
-## 2️⃣ **Install Backend Dependencies**
+Install the root dependencies:
 
 ```bash
 npm install
 ```
 
----
-
-## 3️⃣ **Compile Solidity Contracts**
+Compile the contracts:
 
 ```bash
 npx hardhat compile
 ```
 
-This generates artifacts containing ABI + bytecode.
-
----
-
-## 4️⃣ **Run a Blockchain Network**
-
-### Local Hardhat Mainnet Fork 
-
-```bash
-npx hardhat node --network hardhat
-```
-
----
-
-## 5️⃣ **Deploy Smart Contracts**
-
-```bash
-npx hardhat run scripts/deploy.mjs # --network sepolia or mainnet
-```
-
-Deployment info (contract addresses, artifacts) will be saved according to your script’s logic.
-
----
-
-## 6️⃣ **Start the Frontend**
+Copy the generated contract ABIs into the frontend:
 
 ```bash
 cd frontend
 npm install
-```
-
----
-
-## 7️⃣ **Copy Contract Artifacts for the Frontend**
-
-```bash
 npm run copy-artifacts
 ```
 
-This moves ABIs + metadata to:
+Create a root `.env` file with the RPC and deployment settings required by the
+scripts:
 
-```
-frontend/contracts/
-```
-
----
-
-## 8️⃣ **Run the Frontend App**
-
-```bash
-npm run dev
-```
-
----
-
-# ⚙️ **Environment Variables**
-
-Create `.env` in the root directory:
-
-```
+```env
 MAINNET_RPC_URL=
 SEPOLIA_RPC_URL=
 SEPOLIA_PRIVATE_KEY=
 ```
 
-(Contract addresses depend on deployment.)
+## Run locally
 
----
+Start a local Hardhat node in one terminal:
 
-# 📝 **How does it work**
-
-1. User purchases an NFT representing an investment strategy.
-2. User invests (locks funds) through the Vault.
-3. Upon locking, user immediately receives ZKN tokens equal to the expected APY.
-4. ZKN can be spent on the Pick-a-Chance casino-like game, powered by GameEngine.
-5.  Real investment yield is unlocked after the lock period.
-
----
-
-# 📝 **Available Scripts**
-
-### Essential commands/scripts 
 ```bash
-$ npx hardhat compile # compile contracts 
-$ npx hardhat node --network hardhat # this will run mainnet fork local node, needed if deploying locally
-$ npx hardhat run scripts/deploy.mjs --network sepolia # or --network localhost
-$ npx hardhat run scripts/getState.mjs --network sepolia # outputs current stats of deployed contracts (fee settings etc.)
+npx hardhat node
 ```
-### Run frontend
+
+Deploy the contracts in another terminal:
+
 ```bash
-$ npm run copy-artifacts # run this after making changes to contracts and compiling them, otherwise just continue with:
-$ npm run dev
+npx hardhat run scripts/deploy.mjs --network localhost
 ```
----
+
+Start the frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+## Deploy the frontend
+
+The Vite build writes to the root `docs/` directory, which is suitable for
+GitHub Pages configured to deploy from the repository's `/docs` folder.
+
+```bash
+cd frontend
+npm run build
+```
+
+For a production preview:
+
+```bash
+npm run preview
+```
+
+## Useful commands
+
+```bash
+npx hardhat compile
+npx hardhat run scripts/getState.mjs --network sepolia
+cd frontend && npm run copy-artifacts
+cd frontend && npm run build
+```

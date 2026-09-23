@@ -26,4 +26,3 @@ node_modules/
 *.env
 *.env.*
 # But allow frontend public env
-!frontend/.env

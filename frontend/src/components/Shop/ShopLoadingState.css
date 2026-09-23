@@ -1,0 +1,85 @@
+/* Shared container for all shop states */
+.shop-state-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 2rem;
+  gap: 1.5rem;
+}
+
+/* Loading state */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  color: #5f6368;
+}
+
+.loading-spinner {
+  width: 54px;
+  height: 54px;
+  border: 5px solid #e8eaed;
+  border-top: 5px solid #667eea;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+/* Error state */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: #c62828;
+  font-size: 1.05rem;
+}
+
+.error-icon {
+  font-size: 2.2rem;
+}
+
+.retry-button {
+  margin-top: 0.75rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: #667eea;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.retry-button:hover {
+  background: #5568d6;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: #5f6368;
+  font-size: 1.1rem;
+}
+
+.empty-icon {
+  font-size: 3rem;
+}
+
+.empty-subtitle {
+  color: #9aa0a6;
+  font-size: 0.95rem;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

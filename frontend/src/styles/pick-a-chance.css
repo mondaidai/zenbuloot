@@ -1,0 +1,423 @@
+.home-container {
+  width: 100%;
+  background: #e2e0e0;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+.home-inner {
+  width: 100%;
+  max-width: 1400px;
+  background: #ffffff;
+  padding: 40px 60px 80px 60px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* General page & paper layout */
+.page-container {
+  width: 100%;
+  background: #e2e0e0;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+.paper {
+  width: 100%;
+  max-width: 1400px;
+  background: #ffffff;
+  padding: 40px 60px 80px 60px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  margin: 0;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Game wrapper & layout */
+.game-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  width: 100%;
+}
+
+.game-controls-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  max-width: 350px;
+}
+
+.possible-win-section {
+  width: 100%;
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+  margin-left: 20px;
+}
+
+.result-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 260px;
+}
+
+/* Possible win card */
+.possible-win-card {
+  background: #354f52;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  width: 100%;
+  min-width: 200px;
+  max-width: 100%;
+  color: #e9e5e5;
+  box-sizing: border-box;
+}
+
+.win-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #48605a;
+}
+
+.flow-item {
+  text-align: center;
+  flex: 1;
+}
+
+.flow-amount {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #4caf50;
+  margin-bottom: 4px;
+}
+
+.flow-label {
+  font-size: 0.8rem;
+  color: #b9b855;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flow-arrow {
+  font-size: 1.5rem;
+  color: #b9b855;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+.win-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  padding: 6px 0;
+}
+
+.detail-row span {
+  color: #ccc;
+}
+
+.detail-row strong {
+  color: #e9e5e5;
+}
+
+/* Sliders */
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slider-label {
+  color: #2f3e46;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.slider-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-value {
+  min-width: 60px;
+  text-align: right;
+  color: #2f3e46;
+  font-weight: 700;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  max-width: 280px;
+  height: 16px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #5a887d 0%, #354f52 100%);
+  outline: none;
+  transition: background 0.3s;
+  position: relative;
+}
+
+.slider:hover {
+  background: linear-gradient(90deg, #67a08d 0%, #48605a 100%);
+}
+
+/* Slider thumb */
+.slider::-webkit-slider-thumb,
+.slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: #e9e5e5;
+  border: 3px solid #4caf50;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.slider::-webkit-slider-thumb:hover,
+.slider::-moz-range-thumb:hover {
+  transform: scale(1.3);
+  background: #fff;
+}
+
+/* Slider track */
+.slider::-webkit-slider-runnable-track,
+.slider::-moz-range-track {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #4caf50 var(--percent, 50%), #ccc var(--percent, 50%));
+}
+
+/* Strong overrides to prevent native blue tint on mobile browsers */
+input[type="range"].slider,
+input[type="range"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  accent-color: transparent !important;
+}
+
+/* WebKit specific: fully style track and thumb to override UA styles */
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  height: 12px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(90deg, #4caf50 var(--percent, 50%), #ccc var(--percent, 50%)) !important;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin-top: -8px !important; /* center the thumb on the track */
+  background: #e9e5e5 !important;
+  border: 3px solid #4caf50 !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+}
+
+/* Firefox specific: style progress and thumb */
+input[type="range"]::-moz-range-track {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #4caf50 var(--percent, 50%), #ccc var(--percent, 50%));
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: #e9e5e5;
+  border: 3px solid #4caf50;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Bet input & container */
+.bet-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.bet-input {
+  width: 70px;
+  padding: 6px 8px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  text-align: center;
+  appearance: textfield;
+}
+
+/* Play button */
+.play-button-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.play-button {
+  width: 100%;
+  max-width: 180px;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Results */
+.result {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  transition: transform 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+.result.win {
+  color: #b9b855;
+}
+
+.result.lose {
+  color: #a6aaa0;
+}
+
+.result.animate {
+  transform: scale(1.3);
+}
+
+/* Game explanation */
+.game-explanation {
+  margin-top: 30px;
+  background-color: #354f52;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #e9e5e5;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Balance display */
+.balance-display {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  color: #2f3e46;
+  font-weight: 600;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+/* Responsive stacking */
+@media (max-width: 700px) {
+  .game-controls-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .game-wrapper {
+    flex-direction: column;
+  }
+
+  .slider-value {
+    min-width: 40px;
+  }
+}
+
+/* Ensure mobile sliders match desktop (same regulators/logic and good touch targets) */
+@media (max-width: 480px) {
+  /* Make the controls section wider and full-width on phones */
+  .game-controls {
+    max-width: none;
+    width: 100%;
+  }
+
+  /* Make possible win stack below controls and remove left margin */
+  .possible-win-section {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-top: 12px;
+  }
+
+  /* Slightly reduce gap to use space better on phones */
+  .game-controls-section {
+    gap: 12px;
+  }
+
+  /* Slider visuals match desktop and prevent native tint */
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    max-width: 100%;
+    height: 16px; /* same as desktop */
+    border-radius: 8px;
+    /* ensure no browser accent color shows through */
+    accent-color: transparent;
+    background: linear-gradient(90deg, #5a887d 0%, #354f52 100%);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slider::-webkit-slider-thumb,
+  .slider::-moz-range-thumb {
+    width: 28px; /* same as desktop */
+    height: 28px;
+  }
+
+  .slider::-webkit-slider-runnable-track,
+  .slider::-moz-range-track {
+    height: 12px; /* same as desktop */
+    border-radius: 6px;
+    background: linear-gradient(90deg, #4caf50 var(--percent, 50%), #ccc var(--percent, 50%));
+  }
+
+  /* Allow controls to wrap so slider doesn't get compressed by inputs */
+  .slider-controls {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .slider-value {
+    min-width: 50px;
+  }
+}

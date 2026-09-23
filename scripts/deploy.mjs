@@ -97,7 +97,7 @@ async function setupInitialItems(omamoriContract, ownerSigner) {
         {
             name: "Success",
             defaultUses: 5,
-            imageURI: "images/red_omamori.png",
+            imageURI: "images/red_omamori.webp",
             retired: false,
             availableInShop: true,
             expiresAt: 0,
@@ -113,7 +113,7 @@ async function setupInitialItems(omamoriContract, ownerSigner) {
         {
             name: "Wealth",
             defaultUses: 0,
-            imageURI: "images/violet_omamori.png",
+            imageURI: "images/violet_omamori.webp",
             retired: false,
             availableInShop: true,
             expiresAt: 0,
