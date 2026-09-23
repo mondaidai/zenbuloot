@@ -4,7 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   // Ensure this matches your GitHub repo name exactly
-  base: '/ZenbuLoot/', 
+  base: '/zenbuloot/', 
   plugins: [react()],
   build: {
     outDir: '../docs',   // Build into the root repository's /docs for GH Pages
